@@ -6,4 +6,4 @@ These templates are crucial for efficiently managing and scaling applications in
 
 ## Contents
 
-- [**Woodpecker YAML Files**](/.woodpecker/): Templates used for automated deployments.
+- [**Woodpecker YAML Files**](Service_Queue/tree/master/.woodpecker/): Templates used for automated deployments.
