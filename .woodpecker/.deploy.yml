@@ -36,5 +36,7 @@ steps:
     depends_on: deploy
 
 when:
-  - branch: Main
-    event: push
+  - branch: main # Update branch name accordingly
+    event:
+      - push
+      - manual
