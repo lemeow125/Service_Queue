@@ -1,3 +1,6 @@
+# Deployment file for Woodpecker CI/CD
+# No volumes - Suited for deployments without local databases (i.e. external PostgreSQL instance)
+
 steps:
   - name: deploy
     image: alpine:3.20
@@ -20,15 +23,17 @@ steps:
         cd "$PROJECT_DIRECTORY";
         docker-compose down;
         docker image rm "$REGISTRY_IMAGE_TAG" || true;
-        git restore . && git pull origin "$CI_COMMIT_BRANCH";
-        docker-compose up -d;"
+        wget -O "$DOCKER_COMPOSE_URL" docker-compose.yml;
+        docker pull "$REGISTRY_IMAGE_TAG";
+        docker-compose up -d;
+        docker image prune -af;"
   - name: discord
     image: appleboy/drone-discord
     settings:
       webhook_id:
-        from_secret: SERVICE_QUEUE_DISCORD_WEBHOOK_ID
+        from_secret: DISCORD_WEBHOOK_ID
       webhook_token:
-        from_secret: SERVICE_QUEUE_DISCORD_WEBHOOK_TOKEN
+        from_secret: DISCORD_WEBHOOK_TOKEN
       message: >
         {{#success build.status}}
           {{repo.name}} deployment #{{build.number}} {{build.status}}
@@ -36,7 +41,10 @@ steps:
     depends_on: deploy
 
 when:
-  - branch: main # Update branch name accordingly
+  - branch: master
     event:
       - push
       - manual
+
+depends_on:
+  - build
