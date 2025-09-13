@@ -1,4 +1,4 @@
-# Deployment YML for Woodpecker CI/CD
+# Deployment step for Woodpecker CI/CD
 # Ephemeral volumes - Data is not persisted across deployments (i.e. database volume)
 # Remove line 29 for persistent volumes
 

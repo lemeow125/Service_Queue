@@ -1,4 +1,4 @@
-# Build YML for Woodpecker CI/CD
+# Build step for Woodpecker CI/CD
 
 labels:
   platform: linux/amd64

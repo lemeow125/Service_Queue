@@ -1,4 +1,4 @@
-# Deployment file for Woodpecker CI/CD
+# Deployment step for Woodpecker CI/CD
 # No volumes - Suited for deployments without local databases (i.e. external PostgreSQL instance)
 
 steps:
