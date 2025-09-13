@@ -11,9 +11,11 @@ steps:
     #   variable:
     #     from_secret: variable
     commands:
-      - uv sync --frozen
+      - uv sync --frozen --cache-dir /.cache/uv --link-mode=copy
       - export PATH=".venv/bin:$PATH"
       - pytest
+    volumes:
+      - /tmp/.uv:/.cache/uv # Optimization: Shared UV cache on local build server
   - name: discord
     image: appleboy/drone-discord
     settings:
