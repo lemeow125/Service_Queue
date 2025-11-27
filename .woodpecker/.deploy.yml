@@ -4,7 +4,7 @@
 
 steps:
   - name: deploy
-    image: alpine:3.20
+    image: alpine:latest
     environment:
       SSH_HOST:
         from_secret: SSH_HOST
@@ -30,7 +30,9 @@ steps:
         wget -O "$DOCKER_COMPOSE_URL" docker-compose.yml;
         docker pull "$REGISTRY_IMAGE_TAG";
         docker-compose up -d;
-        docker image prune -af;"
+        docker image prune -af;
+        sleep 60;
+        docker-compose logs;"
   - name: discord
     image: appleboy/drone-discord
     settings:

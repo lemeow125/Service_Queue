@@ -1,5 +1,6 @@
 # Deployment step for Woodpecker CI/CD
-# No volumes - Suited for deployments without local databases (i.e. external PostgreSQL instance)
+# Git-backed local builds as opposed to just fetching updated docker-compose.yml
+# Remove line 29 for persistent volumes
 
 steps:
   - name: deploy
@@ -13,6 +14,8 @@ steps:
         from_secret: SSH_KEY
       REGISTRY_IMAGE_TAG:
         from_secret: REGISTRY_IMAGE_TAG
+      DOCKER_VOLUME_DB:
+        from_secret: DOCKER_VOLUME_DB
     commands:
       - apk add openssh
       - mkdir -p /root/.ssh/
@@ -23,7 +26,7 @@ steps:
         cd "$PROJECT_DIRECTORY";
         docker-compose down;
         docker image rm "$REGISTRY_IMAGE_TAG" || true;
-        wget -O "$DOCKER_COMPOSE_URL" docker-compose.yml;
+        git restore . && git pull origin "$CI_COMMIT_BRANCH" --force --rebase;
         docker pull "$REGISTRY_IMAGE_TAG";
         docker-compose up -d;
         docker image prune -af;
