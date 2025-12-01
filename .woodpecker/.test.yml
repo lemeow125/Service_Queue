@@ -20,14 +20,24 @@ steps:
     image: appleboy/drone-discord
     settings:
       webhook_id:
-        from_secret: DISCORD_WEBHOOK_ID
+        from_secret: SERVICE_QUEUE_DISCORD_WEBHOOK_ID
       webhook_token:
-        from_secret: DISCORD_WEBHOOK_TOKEN
+        from_secret: SERVICE_QUEUE_DISCORD_WEBHOOK_TOKEN
       message: >
         {{#success build.status}}
-          {{repo.name}}: Test step for build #{{build.number}} output {{build.status}}
+          ✅ [{{repo.name}}] Successful test for build #{{build.number}}
+          Branch: {{commit.branch}}
+          Commit: {{commit.sha}}:{{commit.message}}
+          By: {{commit.author}}
+        {{else}}
+          ❌ [{{repo.name}}] Failed test for build #{{build.number}}
+          Branch: {{commit.branch}}
+          Commit: {{commit.sha}}:{{commit.message}}
+          By: {{commit.author}}
         {{/success}}
-
+    when:
+      status: [ success, failure ]
+      
 when:
   - branch: master
     event:
