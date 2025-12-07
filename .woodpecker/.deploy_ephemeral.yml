@@ -61,3 +61,5 @@ when:
 
 depends_on:
   - build
+
+skip_clone: true
