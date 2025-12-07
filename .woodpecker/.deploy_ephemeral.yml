@@ -13,6 +13,8 @@ steps:
         from_secret: SSH_KEY
       REGISTRY_IMAGE_TAG:
         from_secret: REGISTRY_IMAGE_TAG
+      DOCKER_COMPOSE_URL:
+        from_secret: DOCKER_COMPOSE_URL
     commands:
       - apk add openssh
       - mkdir -p /root/.ssh/
