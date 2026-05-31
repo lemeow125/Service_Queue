@@ -1,5 +1,5 @@
 # Deployment step for Woodpecker CI/CD
-# Git-backed docker-compose.yml, images pulled from remote registry
+# Git-backed local builds as opposed to just fetching updated docker-compose.yml and pulling remote image
 
 steps:
   - name: deploy
@@ -11,10 +11,6 @@ steps:
         from_secret: PROJECT_DIRECTORY
       SSH_KEY:
         from_secret: SSH_KEY
-      REGISTRY_IMAGE_TAG:
-        from_secret: REGISTRY_IMAGE_TAG
-      DOCKER_COMPOSE_URL:
-        from_secret: DOCKER_COMPOSE_URL # GitHub raw link to docker-compose.yml 
     commands:
       - apk add openssh
       - mkdir -p /root/.ssh/
@@ -25,8 +21,7 @@ steps:
         cd "$PROJECT_DIRECTORY";
         docker-compose down;
         docker image rm "$REGISTRY_IMAGE_TAG" || true;
-        docker pull "$REGISTRY_IMAGE_TAG";
-        wget -O docker-compose.yml "$DOCKER_COMPOSE_URL";
+        git restore . && git pull origin "$CI_COMMIT_BRANCH" --force --rebase;
         docker-compose up -d;
         docker image prune -af;
         sleep 60;
