@@ -12,6 +12,8 @@ steps:
       SSH_KEY:
         from_secret: SSH_KEY
     commands:
+      - mkdir -p /var/cache/apk
+      - ln -s /var/cache/apk /etc/apk/cache
       - apk add openssh
       - mkdir -p /root/.ssh/
       - echo "$SSH_KEY" | tr -d '\r' > /root/.ssh/id_rsa
@@ -26,6 +28,8 @@ steps:
         docker image prune -af;
         sleep 60;
         docker-compose logs;"
+    volumes:
+      - /var/cache/apk:/var/cache/apk
   - name: discord
     image: appleboy/drone-discord
     settings:
