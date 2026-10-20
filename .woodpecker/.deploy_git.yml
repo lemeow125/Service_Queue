@@ -1,5 +1,5 @@
 # Deployment step for Woodpecker CI/CD
-# Git-backed docker-compose.yml, images pulled from remote registry
+# Git-backed docker compose.yml, images pulled from remote registry
 
 steps:
   - name: deploy
@@ -22,14 +22,14 @@ steps:
       - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > /root/.ssh/config
       - ssh "$SSH_HOST" "
         cd "$PROJECT_DIRECTORY";
-        docker-compose down;
+        docker compose down;
         docker image rm "$REGISTRY_IMAGE_TAG" || true;
         docker pull "$REGISTRY_IMAGE_TAG";
-        wget -O docker-compose.yml "$DOCKER_COMPOSE_URL";
-        docker-compose up -d;
+        wget -O docker compose.yml "$DOCKER_COMPOSE_URL";
+        docker compose up -d;
         docker image prune -af;
         sleep 60;
-        docker-compose logs;"
+        docker compose logs;"
     volumes:
       - /var/cache/apk:/var/cache/apk
 
