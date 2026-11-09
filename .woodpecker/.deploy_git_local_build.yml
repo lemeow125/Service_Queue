@@ -8,6 +8,7 @@ steps:
       SSH_KEY:
         from_secret: SSH_KEY
       SSH_HOST: root@10.0.10.222
+      REGISTRY_IMAGE_TAG: REPLACE-ME
       PROJECT_DIRECTORY: /mnt/nvme2/files/docker\ projects/service_queue/REPLACE-ME
     commands:
       - apk add openssh
