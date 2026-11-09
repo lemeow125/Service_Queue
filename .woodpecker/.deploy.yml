@@ -8,10 +8,9 @@ steps:
     environment:
       SSH_KEY:
         from_secret: SSH_KEY
-      REGISTRY_IMAGE_TAG:
-        from_secret: REGISTRY_IMAGE_TAG
+      REGISTRY_IMAGE_TAG: REPLACE-ME
       SSH_HOST: root@10.0.10.115
-      PROJECT_DIRECTORY: /mnt/nvme/files/docker\ projects/service_queue/REPLACE-ME
+      PROJECT_DIRECTORY: /mnt/nvme2/files/docker\ projects/service_queue/REPLACE-ME
       DOCKER_VOLUME_DB: REPLACE-ME
       DOCKER_COMPOSE_URL: REPLACE-ME
     commands:

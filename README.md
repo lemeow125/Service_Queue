@@ -16,7 +16,7 @@ This repository contains a collection of templates tailored for DevOps practices
 | Variable Name        | Description                                         | Value                        |
 |----------------------|-----------------------------------------------------|--------------------------------------|
 | `SSH_HOST`           | SSH host for deployment                            | `root@10.0.10.115`              |
-| `PROJECT_DIRECTORY`  | Directory on remote host for deployment            | `/mnt/nvme/files/docker\ projects/service_queue/bcbp`                     |
+| `PROJECT_DIRECTORY`  | Directory on remote host for deployment            | `/mnt/nvme2/files/docker\ projects/service_queue/bcbp`                     |
 | `SSH_KEY`            | Private SSH key for authentication                 | `N/A (redacted)`              |
 | `REGISTRY_IMAGE_TAG` | Docker image tag to deploy                         | `git.06222001.xyz/keannu125/drf_template:latest` |
 | `DOCKER_VOLUME_DB`   | Docker volume name for the database                | `drf_template_db_data`               |
