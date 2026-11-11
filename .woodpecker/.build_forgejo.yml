@@ -1,4 +1,4 @@
-# Build step for Woodpecker CI/CD
+# Build step for Woodpecker CI/CD using Forgejo as container registry
 
 labels:
   platform: linux/amd64
@@ -13,12 +13,16 @@ steps:
         from_secret: FORGEJO_REGISTRY_USERNAME
       FORGEJO_REGISTRY_PASSWORD:
         from_secret: FORGEJO_REGISTRY_PASSWORD
-      REGISTRY_IMAGE_TAG:
-        from_secret: REGISTRY_IMAGE_TAG
+      REGISTRY_IMAGE_TAG: REPLACE-ME # Use $CI_COMMIT_SHA for container version, do not append latest
     commands:
       - docker build -t "$REGISTRY_IMAGE_TAG" .
       - echo "$FORGEJO_REGISTRY_PASSWORD" | docker login "$FORGEJO_REGISTRY_URL" --password-stdin -u "$FORGEJO_REGISTRY_USERNAME"
-      - docker push "$REGISTRY_IMAGE_TAG"
+      - |
+        if docker manifest inspect "$REGISTRY_IMAGE_TAG:$CI_COMMIT_SHA" > /dev/null 2>&1; then
+          echo "Image $REGISTRY_IMAGE_TAG:$CI_COMMIT_SHA already exists – skipping build."
+          exit 0
+        fi
+      - docker buildx build --push --platform linux/amd64,linux/arm64 -t "$REGISTRY_IMAGE_TAG:$CI_COMMIT_SHA" .
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
