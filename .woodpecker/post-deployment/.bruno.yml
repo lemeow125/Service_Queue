@@ -1,3 +1,5 @@
+# Bruno API test step for Woodpecker CI/CD
+
 steps:
   - name: test
     image: ghcr.io/usebruno/cli:3.5.1-alpine

@@ -1,0 +1,31 @@
+# Bruno API test step for Woodpecker CI/CD
+
+steps:
+  - name: run pre-deployment tests
+    image: node:23-alpine
+    commands:
+      - npm install -g @usebruno/cli --cache /tmp/.npm --prefer-offline
+      - apk add curl
+      - curl --retry 60 --retry-connrefused --retry-delay 5 --fail --no-progress-meter http://api:8000/ >/dev/null
+      - cd .bruno
+      - bru run --env docker
+    volumes:
+      - /tmp/.npm:/tmp/.npm
+      - /var/cache/apk:/etc/apk/cache
+
+when:
+  - branch: master
+    event:
+      - push
+      - manual
+
+depends_on:
+  - build
+
+# This will spin up a test container to run API tests on
+services:
+  api:
+    image: REPLACE-ME:${CI_COMMIT_SHA} # Image name
+    environment:
+      API_SECRET: # Replace/add env entries as necessary
+        from_secret: API_SECRET

@@ -1,7 +1,11 @@
 # Deployment step for Woodpecker CI/CD
+
+# Industry standard, use alongside a build-push template
+
 # Git-backed docker-compose.yml fetching
 # Image pulled from public container registry (tweak as necessary if using private registry)
 # Ensure your docker-compose.yml references image VERSION from your .env
+
 
 steps:
   - name: deploy
