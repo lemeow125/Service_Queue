@@ -1,5 +1,7 @@
 # Deployment step for Woodpecker CI/CD
-# Git-backed docker compose.yml, images pulled from remote registry
+# Git-backed docker-compose.yml fetching
+# Image pulled from public container registry (tweak as necessary if using private registry)
+# Ensure your docker-compose.yml references image VERSION from your .env
 
 steps:
   - name: deploy
@@ -20,16 +22,23 @@ steps:
       - echo "$SSH_KEY" | tr -d '\r' > /root/.ssh/id_rsa
       - chmod 600 /root/.ssh/id_rsa
       - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > /root/.ssh/config
-      - ssh "$SSH_HOST" "
-        cd "$PROJECT_DIRECTORY";
-        docker compose down;
-        docker image rm "$REGISTRY_IMAGE_TAG" || true;
-        docker pull "$REGISTRY_IMAGE_TAG";
-        wget -O docker compose.yml "$DOCKER_COMPOSE_URL";
-        docker compose up -d;
-        docker image prune -af;
-        sleep 60;
-        docker compose logs;"
+      - |
+        ssh "$SSH_HOST" " 
+          cd \"$PROJECT_DIRECTORY\"
+          docker compose down
+          wget -O docker-compose.yml '$DOCKER_COMPOSE_URL'
+
+          if grep -q '^VERSION=' .env; then
+            sed -i \"s|^VERSION=.*|VERSION=$CI_COMMIT_SHA|\" .env
+          else
+            echo \"VERSION=$CI_COMMIT_SHA\" >> .env
+          fi
+
+          docker compose up -d
+          docker image prune -af
+          sleep 120
+          docker compose logs
+        "
     volumes:
       - /var/cache/apk:/var/cache/apk
 
