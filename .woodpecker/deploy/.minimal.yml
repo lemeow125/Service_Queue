@@ -13,7 +13,6 @@ steps:
       SSH_KEY:
         from_secret: SSH_KEY
       SSH_HOST: root@10.0.10.222
-      REGISTRY_IMAGE_TAG: REPLACE-ME
       PROJECT_DIRECTORY: /mnt/nvme2/files/docker\ projects/service_queue/REPLACE-ME
     commands:
       - apk add openssh
@@ -24,11 +23,10 @@ steps:
       - ssh "$SSH_HOST" "
         cd "$PROJECT_DIRECTORY";
         docker compose down;
-        docker image rm "$REGISTRY_IMAGE_TAG" || true;
+        docker image prune -af;
         git restore . && git pull origin "$CI_COMMIT_BRANCH" --force --rebase;
         docker compose build;
         docker compose up -d;
-        docker image prune -af;
         sleep 60;
         docker compose logs;"
     volumes:
