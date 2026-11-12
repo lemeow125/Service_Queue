@@ -2,14 +2,16 @@
 
 This repository contains a collection of templates tailored for DevOps practices designed to assist with Service Queue deployments.
 
-## `build.yml` Environment Variables
+## `build-push` Environment Variables
 
 | Variable Name              | Description                                      | Value Value                                      |
 |----------------------------|--------------------------------------------------|----------------------------------------------------|
 | `FORGEJO_REGISTRY_URL`     | Artifact registry to push built image to         | `git.06222001.xyz`                                 |
 | `FORGEJO_REGISTRY_USERNAME`| Credentials used to push to the image registry   | `N/A (redacted)`                                   |
 | `FORGEJO_REGISTRY_PASSWORD`| Credentials used to push to the image registry   | `N/A (redacted)`                                   |
-| `REGISTRY_IMAGE_TAG`       | Docker image container tag to push to registry                      | `git.06222001.xyz/keannu125/drf_template:latest`   |
+| `DOCKERHUB_USERNAME`       | Credentials used to push to the image registry   | `N/A (redacted)`                                   |
+| `DOCKERHUB_TOKEN`          | Credentials used to push to the image registry   | `N/A (redacted)`                                   |
+| `REGISTRY_IMAGE_TAG`       | Docker image container tag to push to registry   | `git.06222001.xyz/keannu125/drf_template:latest`   |
 
 ## `deploy.yml` Environment Variables
 
@@ -24,5 +26,4 @@ This repository contains a collection of templates tailored for DevOps practices
 
 > **Note:**  
 > Actual values may differ based on your pipeline configuration.
-> Usage of `.deploy_ephemeral.yml` does not require `DOCKER_VOLUME_DB`
 > For more information, consult your Woodpecker CI/CD maintainer.

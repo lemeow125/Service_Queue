@@ -1,9 +1,9 @@
 # Deployment step for Woodpecker CI/CD
 
 # Basic template, no container registry needed
-# WARNING: Older CI runs will not work correctly with this setup, push newer commit fixes instead
+# CI runs pinned via $CI_COMMIT_SHA, idempotent
 
-# Git-backed docker-compose.yml fetching
+# Git-backed fetching of changes
 # Image built locally, no container registry used
 
 steps:
@@ -21,10 +21,17 @@ steps:
       - chmod 600 /root/.ssh/id_rsa
       - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > /root/.ssh/config
       - ssh "$SSH_HOST" "
+        set -e;
         cd "$PROJECT_DIRECTORY";
         docker compose down;
+<<<<<<< HEAD
         docker image prune -af;
         git restore . && git pull origin "$CI_COMMIT_BRANCH" --force --rebase;
+=======
+        docker image rm "$REGISTRY_IMAGE_TAG" || true;
+        git fetch origin --prune --force;
+        git reset --hard "$CI_COMMIT_SHA";
+>>>>>>> 10869255c74fe2b17a7175c808edd664302268f0
         docker compose build;
         docker compose up -d;
         sleep 60;
